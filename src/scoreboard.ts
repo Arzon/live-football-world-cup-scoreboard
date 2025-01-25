@@ -3,8 +3,9 @@ import { Collection } from './models/collection';
 import { ScoreUpdate } from './types/team-score-pair'
 import { Utils } from "./utils/utils";
 import { IMatch } from "./interfaces/match";
+import { IScoreboard } from "./interfaces/scoreboard";
 
-export class Scoreboard  { 
+export class Scoreboard implements IScoreboard  { 
     private collection: ICollection;
 
     constructor() {
@@ -46,5 +47,4 @@ export class Scoreboard  {
         const getAllMatches = this.collection.getAll();
         return Utils.orderScore(getAllMatches);
     }
-
 }
