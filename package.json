@@ -1,0 +1,33 @@
+{
+  "name": "live-football-world-cup-scoreboard",
+  "version": "1.0.0",
+  "description": "A straightforward library that handles live football scores throughout the World Cup.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arzon/live-football-world-cup-scoreboard.git"
+  },
+  "keywords": [
+    "Football",
+    "World-cup",
+    "live-scoreboard"
+  ],
+  "author": "Arzon Barua",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Arzon/live-football-world-cup-scoreboard/issues"
+  },
+  "homepage": "https://github.com/Arzon/live-football-world-cup-scoreboard#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.3"
+  }
+}
