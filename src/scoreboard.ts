@@ -1,6 +1,8 @@
 import { ICollection } from "./interfaces/collection";
 import { Collection } from './models/collection';
 import { ScoreUpdate } from './types/team-score-pair'
+import { Utils } from "./utils/utils";
+import { IMatch } from "./interfaces/match";
 
 export class Scoreboard  { 
     private collection: ICollection;
@@ -31,4 +33,18 @@ export class Scoreboard  {
           throw new Error("Match not found.");
         }
     }
+
+    public finishMatch(homeTeam: string, awayTeam: string): void {
+        const isDeleted = this.collection.delete(homeTeam, awayTeam);
+    
+        if (!isDeleted) {
+          throw new Error("Match not found.");
+        }
+    }
+
+    public getSummary(): IMatch[] { 
+        const getAllMatches = this.collection.getAll();
+        return Utils.orderScore(getAllMatches);
+    }
+
 }

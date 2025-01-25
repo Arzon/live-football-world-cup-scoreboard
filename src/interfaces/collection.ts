@@ -5,5 +5,6 @@ import { ScoreUpdate } from "../types/team-score-pair";
 export interface ICollection {
     create(match: IMatch): boolean;
     update(scoreUpdate: ScoreUpdate): boolean;
-
+    delete(homeTeam: string, awayTeam: string): boolean;
+    getAll(): IMatch[];
 }
