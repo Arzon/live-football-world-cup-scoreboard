@@ -4,6 +4,7 @@
   "description": "A straightforward library that handles live football scores throughout the World Cup.",
   "main": "dist/src/scoreboard.js",
   "types": "dist/src/scoreboard.d.ts",
+  "Private": true,
   "directories": {
     "test": "test"
   },

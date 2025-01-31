@@ -1,8 +1,7 @@
-import { IScoreboard } from "../src/interfaces/scoreboard";
 import { Scoreboard } from "../src/scoreboard";
 
 describe("Scoreboard", () => {
-  let scoreboard: IScoreboard;
+  let scoreboard: Scoreboard;
 
   beforeEach(() => {
     scoreboard = new Scoreboard();
@@ -12,6 +11,12 @@ describe("Scoreboard", () => {
     scoreboard.startMatch("Mexico", "Canada");
     expect(scoreboard.getSummary()).toHaveLength(1);
   });
+
+  test("should not start the match with two same teams", () => {
+    expect(() => scoreboard.startMatch("Mexico", "Mexico")).toThrow(
+      "A match cannot have the same team playing against itself."
+    )
+  })
 
   test("should throw an error if the match is already in progress", () => {
     scoreboard.startMatch("Mexico", "Canada");
@@ -27,6 +32,14 @@ describe("Scoreboard", () => {
     expect(summary[0].homeTeamScore).toBe(0);
     expect(summary[0].awayTeamScore).toBe(5);
   });
+
+  test("should throw an error if negative value given", () => {
+    scoreboard.startMatch("Mexico", "Canada");
+    expect(() => scoreboard.updateScore([["Mexico", -1],["Canada", 5]])).toThrow( 
+      "Scores cannot be negative."
+    );
+  });
+
 
   test("should throw an error if attempting to update a match that does not exist", () => {
     expect(() => scoreboard.updateScore([["Mexico",1],["Canada", 1]])).toThrow(
@@ -62,4 +75,13 @@ describe("Scoreboard", () => {
     const summary = scoreboard.getSummary();
     expect(summary.map(m => m.homeTeam)).toEqual(["Uruguay","Spain", "Mexico", "Argentina", "Germany"]);
   });
+
+  test("should return an immutable summary", () => {
+    scoreboard.startMatch("Mexico", "Canada");
+    const summary = scoreboard.getSummary();
+    expect(() => {
+      (summary as any)[0].homeTeamScore = 10;
+    }).toThrow();
+  });
+  
 });

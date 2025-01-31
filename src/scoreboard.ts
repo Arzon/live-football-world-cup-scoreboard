@@ -1,18 +1,20 @@
-import { ICollection } from "./interfaces/collection";
-import { Collection } from './models/collection';
 import { ScoreUpdate } from './types/team-score-pair'
 import { Utils } from "./utils/utils";
-import { IMatch } from "./interfaces/match";
-import { IScoreboard } from "./interfaces/scoreboard";
+import { IMatch } from './interfaces/match';
+import { ISummary } from './interfaces/summary';
+import { InternalModule } from './models/collection';
 
-export class Scoreboard implements IScoreboard  { 
-    private collection: ICollection;
+export class Scoreboard { 
+    private collection: InternalModule.Collection;
 
     constructor() {
-        this.collection = new Collection();
+        this.collection = new InternalModule.Collection();
     }
 
-    public startMatch(homeTeam: string, awayTeam: string): void {
+    startMatch(homeTeam: string, awayTeam: string): void {
+        if (homeTeam === awayTeam) {
+            throw new Error("A match cannot have the same team playing against itself.");
+        }
 
         const isCreated =  this.collection.create({
             homeTeam,
@@ -27,15 +29,21 @@ export class Scoreboard implements IScoreboard  {
         }
     }
 
-    public updateScore(scoreUpdate: ScoreUpdate): void {
-        const isUpdated = this.collection.update(scoreUpdate);
+    updateScore(scoreUpdate: ScoreUpdate): void {
+        const [[homeTeam, homeScore], [awayTeam, awayScore]] = scoreUpdate;
+
+        if (homeScore < 0 || awayScore < 0) {
+            throw new Error("Scores cannot be negative.");
+        }
+
+        const isUpdated = this.collection.update(homeTeam, awayTeam, homeScore, awayScore);
     
         if (!isUpdated) {
           throw new Error("Match not found.");
         }
     }
 
-    public finishMatch(homeTeam: string, awayTeam: string): void {
+    finishMatch(homeTeam: string, awayTeam: string): void {
         const isDeleted = this.collection.delete(homeTeam, awayTeam);
     
         if (!isDeleted) {
@@ -43,8 +51,20 @@ export class Scoreboard implements IScoreboard  {
         }
     }
 
-    public getSummary(): IMatch[] { 
-        const getAllMatches = this.collection.getAll();
-        return Utils.orderScore(getAllMatches);
+    private getAllMatches(): IMatch[] {
+        return this.collection.getAll();
+    }
+
+    getSummary(): ReadonlyArray<ISummary> { 
+        const getAllMatches = Utils.orderScore(this.getAllMatches());
+        return Object.freeze(
+            getAllMatches
+              .map(m => Object.freeze({
+                homeTeam: m.homeTeam,
+                awayTeam: m.awayTeam,
+                homeTeamScore: m.homeTeamScore,
+                awayTeamScore: m.awayTeamScore,
+              }))
+        );
     }
 }
