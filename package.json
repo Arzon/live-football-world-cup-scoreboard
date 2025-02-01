@@ -2,9 +2,8 @@
   "name": "live-football-world-cup-scoreboard",
   "version": "1.0.0",
   "description": "A straightforward library that handles live football scores throughout the World Cup.",
-  "main": "dist/src/scoreboard.js",
-  "types": "dist/src/scoreboard.d.ts",
-  "Private": true,
+  "main": "./dist/scoreboard.js",
+  "types": "./dist/scoreboard.d.js",
   "directories": {
     "test": "test"
   },
@@ -12,6 +11,15 @@
     "build": "tsc",
     "test": "jest",
     "prepublishOnly": "npm test && npm run build"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "exports": {
+    "./index": {
+      "import": "./dist/scoreboard.js",
+      "types": "./dist/scoreboard.d.js"
+    }
   },
   "repository": {
     "type": "git",

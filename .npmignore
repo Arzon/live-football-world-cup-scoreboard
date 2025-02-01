@@ -1,0 +1,6 @@
+src/              # ❌ Exclude source files
+*.ts              # ❌ Exclude all TypeScript files
+node_modules/     # ❌ Exclude dependencies
+tsconfig.json     # ❌ Exclude TypeScript config
+package-lock.json # ❌ Exclude lock file
+dist/test 
